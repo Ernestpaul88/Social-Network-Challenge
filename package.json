@@ -1,0 +1,20 @@
+{
+  "name": "social-network-challenge",
+  "version": "1.0.0",
+  "description": "An API for a social network web application where users can share their thoughts, react to friends’ thoughts, and create a friend list. Technologies used include Express.js for routing, a MongoDB database, and the Mongoose ODM.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ernestpaul88/Social-Network-Challenge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ernestpaul88/Social-Network-Challenge/issues"
+  },
+  "homepage": "https://github.com/Ernestpaul88/Social-Network-Challenge#readme"
+}
