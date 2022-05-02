@@ -19,6 +19,8 @@
   "homepage": "https://github.com/Ernestpaul88/Social-Network-Challenge#readme",
   "dependencies": {
     "express": "^4.18.1",
-    "mongoose": "^6.3.2"
+    "mongoose": "^6.3.2",
+    "mongoose-unique-validator": "^3.0.0",
+    "validator": "^13.7.0"
   }
 }
