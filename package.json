@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/Ernestpaul88/Social-Network-Challenge/issues"
   },
-  "homepage": "https://github.com/Ernestpaul88/Social-Network-Challenge#readme"
+  "homepage": "https://github.com/Ernestpaul88/Social-Network-Challenge#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "mongoose": "^6.3.2"
+  }
 }
