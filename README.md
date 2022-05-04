@@ -22,7 +22,7 @@ An API for a social network web application where users can share their thoughts
 
 - Start Application: run 'npm start' from the root directory.
 
-Checkout the [video](https://drive.google.com/file/d/1nQZiMXdbi4KkwnsAWk_5mMXzou10DBgq/view) to see a full demonstration.
+Checkout the [video](https://drive.google.com/file/d/1h4plc247l2-p_xDFD3p0Z-WZ6wHRHKaQ/view) to see a full demonstration.
 
 ## License:
 

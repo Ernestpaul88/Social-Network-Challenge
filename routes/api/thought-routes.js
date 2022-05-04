@@ -14,7 +14,7 @@ router
   .get(getAllThoughts);
 
 router
-  .route(':/userId')
+  .route('/:userId')
   .post(createThought);
   
 router
@@ -23,13 +23,13 @@ router
   .put(updateThought);
 
 router
-  .route(':/userId/:thoughtId')
+  .route('/:userId/:thoughtId')
   .delete(deleteThought);
 
 // Set up POST at /:thoughtId/reactions
 router
 .route('/:thoughtId/reactions')
-.post(addReaction);
+.put(addReaction);
 
 // Set up DELETE at /api/users/:userId/friends/:friendId
 router

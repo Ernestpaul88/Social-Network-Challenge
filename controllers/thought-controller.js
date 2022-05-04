@@ -5,6 +5,7 @@ const thoughtController = {
     // get all thoughts
     getAllThoughts(req, res) {
         Thought.find({})
+          .select('-__v')
           .sort({ _id: -1 })
           .then(dbData => res.json(dbData))
           .catch(err => {
@@ -15,6 +16,7 @@ const thoughtController = {
     // get one thought by id
     getthoughtById({ params }, res) {
         Thought.findOne({ _id: params.id })
+            .select('-__v')
             .then(dbData => {
                 // If no thought is found, send 404
                 if (!dbData) {
@@ -32,22 +34,27 @@ const thoughtController = {
 
     // createThought
     createThought({ params, body }, res) {
-        Thought.create(body)
+      User.findOne({ _id: params.userId })
+      .then(UserData => {
+        // If no user is found, send 404
+        if (!UserData) {
+            return res.status(404).json({ message: 'No user found with this id!' });
+        }
+        Thought.create({thoughtText: body.thoughtText, userName: UserData.userName })
         .then(({ _id }) => {
-            return User.findOneAndUpdate(
-              { _id: params.userId },
-              { $push: { thoughts: _id } },
-              { new: true, runValidators: true }
-            );
-          })
+          return UserData.updateOne(
+            { $push: { thoughts: _id } }
+          )
           .then(dbData => {
-            if (!dbData) {
-              res.status(404).json({ message: 'No user found with this id!' });
-              return;
-            }
-            res.json(dbData);
+            console.log(dbData);
+            res.json({ message: `Successfully Created Thought:${_id}` });
           })
-        .catch(err => res.status(400).json(err));
+        })
+      })
+      .catch(err => {
+          console.log(err);
+          res.status(400).json(err);
+      });
     },
     
     // update thought by id
@@ -66,31 +73,31 @@ const thoughtController = {
     // delete Thought
     deleteThought({ params }, res) {
         Thought.findOneAndDelete({ _id: params.thoughtId })
-            .then(dbData => {
-                if (!dbData) {
-                    return res.status(404).json({ message: 'No thought found with this id!' });
-                }
-                return User.findOneAndUpdate(
-                    { _id: params.UserId },
-                    { $pull: { comments: params.thoughtId } },
-                    { new: true, runValidators: true }
-                  );
-            })
-            .then(dbUserData => {
-                if (!dbUserData) {
-                  res.status(404).json({ message: 'No user found with this id!' });
-                  return;
-                }
-                res.json(dbUserData);
-              })
-            .catch(err => res.status(400).json(err));
+        .then(deletedThought => {
+          if (!deletedThought) {
+            return res.status(404).json({ message: 'No thought with this id!' });
+          }
+          return User.findOneAndUpdate(
+            { _id: params.userId },
+            { $pull: { thoughts: params.thoughtId } },
+            { new: true }
+          );
+        })
+        .then(dbUserData => {
+          if (!dbUserData) {
+            res.status(404).json({ message: 'No user found with this id!' });
+            return;
+          }
+          res.json({ message: `Successfully Deleted Thought:${params.thoughtId}` }); 
+        })
+        .catch(err => res.json(err));
     },
 
     // add reaction
     addReaction({ params, body }, res) {
       Thought.findOneAndUpdate(
         { _id: params.thoughtId },
-        { $push: { replies: body } },
+        { $push: { reactions: body } },
         { new: true }
       )
         .then(dbData => {
@@ -107,7 +114,7 @@ const thoughtController = {
     deleteReaction({ params }, res) {
       Thought.findOneAndUpdate(
         { _id: params.thoughtId },
-        { $pull: { replies: { replyId: params.reactionId } } },
+        { $pull: { reactions: { reactionId: params.reactionId } } },
         { new: true }
       )
         .then(dbData => res.json(dbData))
