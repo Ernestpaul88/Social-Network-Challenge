@@ -64,7 +64,16 @@ const userController = {
                 res.status(404).json({ message: 'No user found with this id!' });
                 return;
             }
-            res.json(dbUserData);
+
+            Thought.updateMany(
+              { _id: { $in: dbUserData.thoughts } },
+              { userName: dbUserData.userName },
+              { new: true }
+            )
+            .then(data => {
+              console.log(data);
+              res.json(dbUserData);
+            })
         })
         .catch(err => res.status(400).json(err));
     },
@@ -72,13 +81,19 @@ const userController = {
 
     // delete User
     deleteUser({ params }, res) {
-        User.findOneAndDelete({ _id: params.id })
+        User.findOneAndDelete({ _id: params.id }, { new: true })
             .then(dbUserData => {
                 if (!dbUserData) {
                     res.status(404).json({ message: 'No user found with this id!' });
                     return;
                 }
+             Thought.deleteMany(
+                { userName: dbUserData.userName }
+              )
+              .then(data => {
+                console.log(data);
                 res.json(dbUserData);
+              })
             })
             .catch(err => res.status(400).json(err));
     },
